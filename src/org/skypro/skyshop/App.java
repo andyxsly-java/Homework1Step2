@@ -14,6 +14,7 @@ public class App {
 
         engine.add(new SimpleProduct("Milk", 100));
         engine.add(new SimpleProduct("Bread", 50));
+        engine.add(new FixPriceProduct("Chocolate"));
         engine.add(new DiscountedProduct("Coffee", 300,20));
 
         engine.add(new Article("Как выбрать молоко", "Полезные советы по выбору молока"));
