@@ -1,34 +1,44 @@
 package org.skypro.skyshop.search;
 
+import org.skypro.skyshop.exception.BestResultNotFound;
+
 public class SearchEngine {
-
     private final Searchable[] items;
-    private int index = 0;
+    private int size;
 
-    public SearchEngine(int size) {
-        items = new Searchable[size];
+    public SearchEngine(int capacity) {
+        this.items = new Searchable[capacity];
     }
 
     public void add(Searchable item) {
-        if (index < items.length) {
-            items[index++] = item;
-        }
+        items[size++] = item;
     }
 
-    public Searchable[] search(String text) {
-        Searchable[] result = new Searchable[5];
-        int count = 0;
+    public Searchable bestResult(String search) throws BestResultNotFound {
+        int maxCount = 0;
+        Searchable best = null;
 
-        for (Searchable s : items) {
-            if (s == null) continue;
+        for (int i = 0; i < size; i++) {
+            String term = items[i].getSearchTerm();
+            int count = 0;
+            int index = term.indexOf(search);
 
-            if (s.getSearchTerm().toLowerCase().contains(text.toLowerCase())) {
-                result[count++] = s;
-                if (count == 5) break;
+            while (index != -1) {
+                count++;
+                index = term.indexOf(search, index + search.length());
+            }
+
+            if (count > maxCount) {
+                maxCount = count;
+                best = items[i];
             }
         }
 
-        return result;
+        if (best == null) {
+            throw new BestResultNotFound(search);
+        }
+
+        return best;
     }
 }
 
