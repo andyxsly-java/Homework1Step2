@@ -1,36 +1,27 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.product.*;
+import org.skypro.skyshop.search.SearchEngine;
+
+import java.util.Arrays;
+
 
 public class App {
     public static void main(String[] args) {
 
-        Product apple = new SimpleProduct("Яблоко", 50);
-        Product cheese = new DiscountedProduct("Сыр", 200, 25);
-        Product coffee = new FixPriceProduct("Кофе");
-        Product book = new DiscountedProduct("Книга", 500, 10);
-        Product tea = new SimpleProduct("Чай", 80);
+        SearchEngine engine = new SearchEngine(20);
 
-        ProductBasket basket = new ProductBasket();
+        engine.add(new SimpleProduct("Milk", 100));
+        engine.add(new SimpleProduct("Bread", 50));
+        engine.add(new FixPriceProduct("Chocolate"));
+        engine.add(new DiscountedProduct("Coffee", 300,20));
 
-        basket.addProduct(apple);
-        basket.addProduct(cheese);
-        basket.addProduct(coffee);
-        basket.addProduct(book);
-        basket.addProduct(tea);
+        engine.add(new Article("Как выбрать молоко", "Полезные советы по выбору молока"));
+        engine.add(new Article("Готовим дома", "10 рецептов выпечки"));
 
-        basket.addProduct(new SimpleProduct("Груша", 60));
-
-        basket.printBasket();
-
-        System.out.println("Стоимость корзины: " + basket.getTotalPrice());
-
-        System.out.println("Есть ли Кофе? " + basket.containsProduct("Кофе"));
-        System.out.println("Есть ли Молоко? " + basket.containsProduct("Молоко"));
-
-        basket.clear();
-
-        basket.printBasket();
+        System.out.println(Arrays.toString(engine.search("мол")));
+        System.out.println(Arrays.toString(engine.search("коф")));
+        System.out.println(Arrays.toString(engine.search("рецепт")));
     }
 }
