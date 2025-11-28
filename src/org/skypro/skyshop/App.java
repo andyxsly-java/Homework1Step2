@@ -1,27 +1,35 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.product.*;
 import org.skypro.skyshop.search.SearchEngine;
-
-import java.util.Arrays;
+import org.skypro.skyshop.exception.BestResultNotFound;
 
 
 public class App {
     public static void main(String[] args) {
+        SearchEngine engine = new SearchEngine(10);
 
-        SearchEngine engine = new SearchEngine(20);
+        try {
+            engine.add(new SimpleProduct("Milk", 100));
+            engine.add(new SimpleProduct("Bread", 50));
+            engine.add(new DiscountedProduct("Coffee Coffee", 300, 20));
 
-        engine.add(new SimpleProduct("Milk", 100));
-        engine.add(new SimpleProduct("Bread", 50));
-        engine.add(new FixPriceProduct("Chocolate"));
-        engine.add(new DiscountedProduct("Coffee", 300,20));
+            // демонстрация ошибочных данных
+            engine.add(new SimpleProduct("   ", 10));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка продукта: " + e.getMessage());
+        }
 
-        engine.add(new Article("Как выбрать молоко", "Полезные советы по выбору молока"));
-        engine.add(new Article("Готовим дома", "10 рецептов выпечки"));
+        try {
+            System.out.println("Лучший результат для 'Coffee': " + engine.bestResult("Coffee"));
+        } catch (BestResultNotFound e) {
+            System.out.println(e.getMessage());
+        }
 
-        System.out.println(Arrays.toString(engine.search("мол")));
-        System.out.println(Arrays.toString(engine.search("коф")));
-        System.out.println(Arrays.toString(engine.search("рецепт")));
+        try {
+            System.out.println("Лучший результат для 'Tea': " + engine.bestResult("Tea"));
+        } catch (BestResultNotFound e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
