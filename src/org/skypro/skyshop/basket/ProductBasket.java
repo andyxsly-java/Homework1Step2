@@ -2,67 +2,37 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class ProductBasket {
 
-    private final Product[] products;
-    private int size;
-
-    public ProductBasket() {
-        this.products = new Product[5];
-        this.size = 0;
-    }
+    private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if (size >= products.length) {
-            System.out.println("Невозможно добавить продукт: корзина заполнена");
-            return;
-        }
-        products[size] = product;
-        size++;
+        products.add(product);
     }
 
-    public int getTotalPrice() {
-        int total = 0;
-        for (int i = 0; i < size; i++) {
-            total += products[i].getPrice();
+    public List<Product> removeProductByName(String name) {
+        List<Product> removed = new ArrayList<>();
+        Iterator<Product> iterator = products.iterator();
+
+        while (iterator.hasNext()) {
+            Product p = iterator.next();
+            if (p.getName().equalsIgnoreCase(name)) {
+                removed.add(p);
+                iterator.remove();
+            }
         }
-        return total;
+        return removed;
     }
 
     public void printBasket() {
-        if (size == 0) {
-            System.out.println("В корзине пусто");
-            return;
+        if (products.isEmpty()) {
+            System.out.println("Корзина пуста");
+        } else {
+            products.forEach(System.out::println);
         }
-
-        int specialsCount = 0;
-
-        for (int i = 0; i < size; i++) {
-            Product p = products[i];
-            System.out.println(p.toString());
-
-            if (p.isSpecial()) {
-                specialsCount++;
-            }
-        }
-
-        System.out.println("Итого: " + getTotalPrice());
-        System.out.println("Специальных товаров: " + specialsCount);
-    }
-
-    public boolean containsProduct(String name) {
-        for (int i = 0; i < size; i++) {
-            if (products[i].getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void clear() {
-        for (int i = 0; i < size; i++) {
-            products[i] = null;
-        }
-        size = 0;
     }
 }
