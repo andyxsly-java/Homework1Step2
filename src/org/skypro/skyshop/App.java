@@ -1,32 +1,33 @@
-
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.product.*;
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.search.SearchEngine;
-import org.skypro.skyshop.search.Searchable;
-
-import java.util.List;
 
 public class App {
+
     public static void main(String[] args) {
 
         ProductBasket basket = new ProductBasket();
+
         basket.addProduct(new SimpleProduct("Книга", 500));
-        basket.addProduct(new DiscountedProduct("Игрушка", 1000, 500));
+        basket.addProduct(new DiscountedProduct("Игрушка", 1000, 3));
         basket.addProduct(new SimpleProduct("Книга", 500));
 
         System.out.println("\n--- Корзина до удаления ---");
         basket.printBasket();
 
-        System.out.println("\nУдаляем продукт: Игрушка");
-        List<Product> removed = basket.removeProductByName("Игрушка");
+        System.out.println("\nУдаляем продукт: Книга");
+        var removed = basket.removeProductByName("Книга");
 
         if (removed.isEmpty()) {
             System.out.println("Список пуст");
         } else {
             System.out.println("Удаленные продукты:");
-            removed.forEach(System.out::println);
+            for (var p : removed) {
+                System.out.println(p);
+            }
         }
 
         System.out.println("\n--- Корзина после удаления ---");
@@ -42,14 +43,17 @@ public class App {
         System.out.println("\n--- Корзина после второй попытки удаления ---");
         basket.printBasket();
 
-        // Демонстрация поиска
+
         SearchEngine searchEngine = new SearchEngine();
+
         searchEngine.add(new SimpleProduct("Настольная игра", 1500));
         searchEngine.add(new SimpleProduct("Игрушка", 200));
+        searchEngine.add(new SimpleProduct("Игра карточная", 300));
 
-        List<Searchable> results = searchEngine.search("игр");
+        var results = searchEngine.search("игр");
 
-        System.out.println("\nРезультаты поиска: ");
-        results.forEach(System.out::println);
+        System.out.println("\nРезультаты поиска:");
+        results.values().forEach(r ->
+                System.out.println(r.getStringRepresentation()));
     }
 }
