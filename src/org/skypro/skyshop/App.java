@@ -53,7 +53,7 @@ public class App {
         var results = searchEngine.search("игр");
 
         System.out.println("\nРезультаты поиска:");
-        results.values().forEach(r ->
+        results.forEach(r ->
                 System.out.println(r.getStringRepresentation()));
     }
 }
