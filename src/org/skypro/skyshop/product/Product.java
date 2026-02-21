@@ -14,6 +14,13 @@ public abstract class Product implements Searchable {
         this.name = name;
     }
 
+    public abstract int getPrice();
+
+    public boolean isSpecial() {
+        return false;
+    }
+
+
     @Override
     public String getSearchableName() {
         return name;

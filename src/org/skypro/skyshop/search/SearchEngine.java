@@ -3,6 +3,7 @@ package org.skypro.skyshop.search;
 import java.util.*;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
 
@@ -13,18 +14,14 @@ public class SearchEngine {
     }
 
     public Set<Searchable> search(String searchTerm) {
-        Set<Searchable> results = new TreeSet<>(new SearchableComparator());
 
-        for (Searchable item : items) {
-            if (item.getSearchTerm()
-                    .toLowerCase()
-                    .contains(searchTerm.toLowerCase())) {
-
-                results.add(item);
-            }
-        }
-
-        return results;
+        return items.stream()
+                .filter(item -> item.getSearchTerm()
+                        .toLowerCase()
+                        .contains(searchTerm.toLowerCase()))
+                .collect(Collectors.toCollection(
+                        () -> new TreeSet<>(new SearchableComparator())
+                ));
     }
 }
 
